@@ -1,0 +1,10 @@
+.env
+venv/
+__pycache__/
+*.db
+~$*
+data/uploads/
+data/agent_log.jsonl
+data/agent_log_dev.jsonl
+data/ket_qua_kpi.xlsx
+data/ket_qua_kpi_mini.xlsx

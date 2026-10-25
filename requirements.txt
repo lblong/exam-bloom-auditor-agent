@@ -1,0 +1,11 @@
+openai
+langchain
+langchain-openai
+langchain-core
+python-docx
+openpyxl
+pandas
+pydantic
+sqlalchemy
+streamlit
+python-dotenv
