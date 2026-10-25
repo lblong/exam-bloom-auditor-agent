@@ -1,0 +1,242 @@
+[
+  {
+    "so_cau": 1,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 2,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 3,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 4,
+    "co_loi": true,
+    "ma_loi": "THIEU_DAP_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 5,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 6,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 7,
+    "co_loi": true,
+    "ma_loi": "TRUNG_PHUONG_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 8,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 9,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 10,
+    "co_loi": true,
+    "ma_loi": "TRUNG_PHUONG_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 11,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 12,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 13,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 14,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 15,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 16,
+    "co_loi": true,
+    "ma_loi": "VI_PHAM_QUY_CHE",
+    "bloom": null
+  },
+  {
+    "so_cau": 17,
+    "co_loi": true,
+    "ma_loi": "VI_PHAM_QUY_CHE",
+    "bloom": null
+  },
+  {
+    "so_cau": 18,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 19,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 20,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 21,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 22,
+    "co_loi": true,
+    "ma_loi": "TRUNG_PHUONG_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 23,
+    "co_loi": true,
+    "ma_loi": "THIEU_DAP_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 24,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 25,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 26,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 27,
+    "co_loi": true,
+    "ma_loi": "TRUNG_PHUONG_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 28,
+    "co_loi": true,
+    "ma_loi": "VI_PHAM_QUY_CHE",
+    "bloom": null
+  },
+  {
+    "so_cau": 29,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 30,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 31,
+    "co_loi": true,
+    "ma_loi": "THIEU_PHUONG_AN",
+    "bloom": null
+  },
+  {
+    "so_cau": 32,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "PHAN_TICH"
+  },
+  {
+    "so_cau": 33,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 34,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 35,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 36,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  },
+  {
+    "so_cau": 37,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 38,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "VAN_DUNG"
+  },
+  {
+    "so_cau": 39,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "NHO"
+  },
+  {
+    "so_cau": 40,
+    "co_loi": false,
+    "ma_loi": null,
+    "bloom": "HIEU"
+  }
+]
