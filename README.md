@@ -23,3 +23,12 @@ Tiếp nhận file → File Parser → Rule Validator → Bloom Evaluator (GPT) 
 - Không APPROVED nếu chưa qua 100% kiểm tra kỹ thuật.
 - Câu mơ hồ hoặc độ tin cậy thấp → NEEDS_MANUAL_REVIEW.
 - Ghi xong phải đọc lại DB để xác minh trước khi báo hoàn thành.
+
+## Quy định định dạng đề thi chuẩn
+- Mỗi câu hỏi bắt đầu bằng: `Câu <số>. <Nội dung>`
+- Phương án trên từng dòng: `A. ...`, `B. ...`, `C. ...`, `D. ...`
+- Dòng đáp án: `Đáp án: A` (hoặc `Đáp án: A, C` nếu nhiều đáp án)
+- **Quy tắc số đáp án:**
+  - **Mặc định:** Mỗi câu hỏi chỉ có 1 đáp án đúng duy nhất.
+  - **Câu chọn nhiều đáp án:** Thân câu hỏi bắt buộc phải có ghi chú trong ngoặc dạng `(chọn ... đáp án)`, ví dụ: `(chọn 2 đáp án)`, `(chọn 3 đáp án)`, `(chọn nhiều đáp án)`.
+  - Nếu không có ghi chú trong ngoặc mà đáp án có từ 2 lựa chọn trở lên, câu hỏi sẽ bị gắn lỗi `NHIEU_DAP_AN`.
