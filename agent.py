@@ -36,7 +36,6 @@ def run_audit(
     file_path: str,
     limit: Optional[int] = None,
     dung_bloom: bool = True,
-    danh_gia_ca_cau_loi: bool = False,
     on_step: Optional[Callable[[str], None]] = None,
 ) -> Dict:
     lg = AgentLogger()
@@ -69,7 +68,7 @@ def run_audit(
     blooms = []
     tok_in = tok_out = 0
     if dung_bloom:
-        can_danh_gia = [q for q, v in zip(questions, vals) if danh_gia_ca_cau_loi or v.passed]
+        can_danh_gia = [q for q, v in zip(questions, vals) if v.passed]
         say(f"Bước 4/6: Phân loại Bloom bằng GPT ({len(can_danh_gia)} câu)...")
         blooms = evaluate_all(can_danh_gia) if can_danh_gia else []
         tok_in = sum(b.input_tokens for b in blooms)
@@ -102,14 +101,33 @@ def run_audit(
     rows = []
     for q, v, e in zip(questions, vals, expected):
         b = b_map.get(q.so_cau)
+        if b:
+            if b.muc_do == "KHONG_XAC_DINH" and "Lỗi" in b.ly_do:
+                muc_bloom = "LỖI"
+            else:
+                muc_bloom = b.muc_do
+            ly_do_bloom = b.ly_do
+            do_tin_cay = b.do_tin_cay
+        else:
+            if not dung_bloom:
+                muc_bloom = "CHƯA_ĐO"
+                ly_do_bloom = "Không thể đo vì chưa bật tính năng AI phân tích Bloom"
+            elif not v.passed:
+                muc_bloom = "KHÔNG_ĐO"
+                ly_do_bloom = "Không thể đo vì câu hỏi bị lỗi hình thức kỹ thuật (bị loại trước khi gọi AI)"
+            else:
+                muc_bloom = "LỖI"
+                ly_do_bloom = "Không thể đo do lỗi phát sinh khi gọi AI"
+            do_tin_cay = None
+
         rows.append({
             "so_cau": q.so_cau,
             "cau_hoi": q.than_cau_hoi,
             "trang_thai": e["trang_thai"],
             "loi": "; ".join(f"[{l.ma_loi}] {l.mo_ta}" for l in v.loi),
-            "muc_bloom": b.muc_do if b else None,
-            "ly_do_bloom": b.ly_do if b else None,
-            "do_tin_cay": b.do_tin_cay if b else None,
+            "muc_bloom": muc_bloom,
+            "ly_do_bloom": ly_do_bloom,
+            "do_tin_cay": do_tin_cay,
         })
 
     ket_qua = {
@@ -117,7 +135,7 @@ def run_audit(
         "batch_id": batch_id,
         "tong_so_cau": len(rows),
         "tong_hop_trang_thai": dict(Counter(r["trang_thai"] for r in rows)),
-        "ma_tran_bloom": dict(Counter(r["muc_bloom"] for r in rows if r["muc_bloom"])),
+        "ma_tran_bloom": dict(Counter(r["muc_bloom"] for r in rows if r["muc_bloom"] in ("NHO", "HIEU", "VAN_DUNG", "PHAN_TICH"))),
         "bao_cao": rows,
         "token": {"vao": tok_in, "ra": tok_out},
         "verify": vr.model_dump(),

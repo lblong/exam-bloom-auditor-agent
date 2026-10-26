@@ -28,9 +28,8 @@ Nguyên tắc:
 
 def format_question(q: Question) -> str:
     dong = [f"Câu hỏi: {q.than_cau_hoi}"]
-    for k in "ABCD":
-        if k in q.phuong_an:
-            dong.append(f"{k}. {q.phuong_an[k]}")
+    for k in sorted(q.phuong_an):
+        dong.append(f"{k}. {q.phuong_an[k]}")
     if q.dap_an_dung:
         dong.append(f"Đáp án đúng: {q.dap_an_dung}")
     return "\n".join(dong)
