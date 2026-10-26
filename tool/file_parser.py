@@ -8,17 +8,30 @@ from docx import Document
 from models import Question
 
 RE_CAU = re.compile(r"^C[âa]u\s*(\d+)\s*[\.\:\)]\s*(.*)", re.IGNORECASE)
-RE_PA = re.compile(r"^([A-D])\s*[\.\)]\s*(.*)")
-RE_DAP_AN = re.compile(r"^[ĐD][áa]p\s*[áa]n\s*[:\-]?\s*([A-D])?", re.IGNORECASE)
+RE_PA = re.compile(r"^([A-J])\s*[\.\)]\s*(.*)")
+RE_DAP_AN = re.compile(r"^[ĐD][áa]p\s*[áa]n\s*[:\-]?\s*(.*)", re.IGNORECASE)
 
 
-def parse_docx(path: str) -> List[Question]:
-    doc = Document(path)
-    questions: List[Question] = []
-    current = None
+def doc_dap_an(phan_sau):
+    """'A' -> 'A'; 'A, C' / 'A và C' / 'AC' -> 'A,C'; không đọc được -> None"""
+    doan = re.split(r"[.(]", phan_sau)[0].upper()
+    cac_chu = []
+    for p in re.split(r"[^A-ZÀ-Ỹ]+", doan):
+        if not p or p in ("VÀ", "AND"):
+            continue
+        if re.fullmatch(r"[A-Z]{1,6}", p):
+            cac_chu.extend(p)
+        else:
+            break
+    return ",".join(sorted(set(cac_chu))) or None
 
-    for para in doc.paragraphs:
-        line = para.text.strip()
+
+def parse_lines(lines):
+    questions, current = [], None
+    dang_o = "than"   # than (thân câu hỏi) -> pa (đang đọc phương án) -> xong (đã gặp Đáp án)
+    chu_cuoi = ""
+    for raw in lines:
+        line = raw.strip()
         if not line:
             continue
 
@@ -26,25 +39,34 @@ def parse_docx(path: str) -> List[Question]:
         if m:
             current = Question(so_cau=int(m.group(1)), than_cau_hoi=m.group(2).strip())
             questions.append(current)
+            dang_o, chu_cuoi = "than", ""
             continue
-
-        if current is None:
-            continue
+        if current is None or dang_o == "xong":
+            continue   # chưa vào câu nào, hoặc đang là phần giải thích sau Đáp án
 
         m = RE_DAP_AN.match(line)
         if m:
-            current.dap_an_dung = m.group(1).upper() if m.group(1) else None
+            current.dap_an_dung = doc_dap_an(m.group(1))
+            dang_o = "xong"
             continue
 
         m = RE_PA.match(line)
-        if m:
+        if m and m.group(1) > chu_cuoi:   # chỉ nhận chữ cái tăng dần: A, B, C...
             current.phuong_an[m.group(1)] = m.group(2).strip()
+            chu_cuoi = m.group(1)
+            dang_o = "pa"
             continue
 
-        # Dòng không khớp gì: coi là phần tiếp theo của thân câu hỏi
-        current.than_cau_hoi += " " + line
-
+        # Dòng không khớp gì: nối vào phương án cuối (nếu đang đọc phương án) hoặc thân câu hỏi
+        if dang_o == "pa":
+            current.phuong_an[chu_cuoi] = (current.phuong_an[chu_cuoi] + " " + line).strip()
+        else:
+            current.than_cau_hoi += " " + line
     return questions
+
+
+def parse_docx(path):
+    return parse_lines([p.text for p in Document(path).paragraphs])
 
 
 def parse_xlsx(path: str) -> List[Question]:

@@ -20,7 +20,7 @@ class QuestionRecord(Base):
     so_cau: Mapped[int] = mapped_column(Integer)
     than_cau_hoi: Mapped[str] = mapped_column(Text, default="")
     phuong_an: Mapped[str] = mapped_column(Text, default="{}")      # JSON dạng chuỗi
-    dap_an_dung: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    dap_an_dung: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     trang_thai: Mapped[str] = mapped_column(String(32))
     loi: Mapped[str] = mapped_column(Text, default="[]")            # JSON dạng chuỗi
     muc_bloom: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
