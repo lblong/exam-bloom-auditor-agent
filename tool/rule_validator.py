@@ -16,16 +16,16 @@ SO_CHU = {
 def so_dap_an_yeu_cau(than):
     """
     Trả về số đáp án mà đề yêu cầu (int) hoặc 'NHIEU':
-    - Nếu có dạng '(chọn X đáp án)' (hoặc phương án/câu/ý) trong ngoặc: trả về X.
-    - Nếu có dạng '(chọn nhiều/tất cả đáp án)': trả về 'NHIEU'.
+    - Nếu có dạng '(chọn X đáp án [đúng / đúng nhất / chính xác...])' (hoặc phương án/câu/ý) trong ngoặc: trả về X.
+    - Nếu có dạng '(chọn nhiều/tất cả [các] đáp án [đúng...])': trả về 'NHIEU'.
     - Nếu không có ghi chú trong ngoặc: mặc định là 1 đáp án duy nhất.
     """
     t = than.lower()
-    m = re.search(r"[\(\[\{]\s*chọn\s+(\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)\s+(?:đáp án|phương án|câu|ý)\s*[\)\]\}]", t)
+    m = re.search(r"[\(\[\{]\s*chọn\s+(\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)\s+(?:đáp án|phương án|câu|ý|câu trả lời)(?:\s+[^)\]}]+)?\s*[\)\]\}]", t)
     if m:
         v = m.group(1)
         return int(v) if v.isdigit() else SO_CHU.get(v, 1)
-    if re.search(r"[\(\[\{]\s*chọn\s+(?:tất cả|nhiều)\s+(?:đáp án|phương án|câu|ý)?\s*[\)\]\}]", t):
+    if re.search(r"[\(\[\{]\s*chọn\s+(?:tất cả|nhiều)(?:\s+[^)\]}]+)?\s*[\)\]\}]", t):
         return "NHIEU"
     return 1
 
