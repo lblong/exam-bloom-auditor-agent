@@ -14,12 +14,16 @@ RE_DAP_AN = re.compile(r"^[ĐD][áa]p\s*[áa]n\s*[:\-]?\s*(.*)", re.IGNORECASE)
 
 def doc_dap_an(phan_sau):
     """'A' -> 'A'; 'A, C' / 'A và C' / 'AC' -> 'A,C'; không đọc được -> None"""
-    doan = re.split(r"[.(]", phan_sau)[0].upper()
+    if not phan_sau or not str(phan_sau).strip():
+        return None
+    # Cắt bỏ phần giải thích nếu gặp ., (, -, :, ; hoặc các từ giải thích thông dụng
+    doan = re.split(r"[.\(\-\:\;]|\b(?:do|vì|vi|bởi|boi|giải thích|giai thich)\b", str(phan_sau), flags=re.IGNORECASE)[0].strip().upper()
     cac_chu = []
     for p in re.split(r"[^A-ZÀ-Ỹ]+", doan):
-        if not p or p in ("VÀ", "AND"):
+        if not p or p in ("VÀ", "AND", "&"):
             continue
-        if re.fullmatch(r"[A-Z]{1,6}", p):
+        # Chỉ nhận chữ cái phương án hợp lệ (A đến J), tối đa 4 ký tự nếu viết liền (ví dụ: AB, CD)
+        if re.fullmatch(r"[A-J]{1,4}", p):
             cac_chu.extend(p)
         else:
             break
@@ -71,18 +75,41 @@ def parse_docx(path):
 
 def parse_xlsx(path: str) -> List[Question]:
     df = pd.read_excel(path, dtype=str).fillna("")
+    # Chuẩn hóa tên cột: map tên cột viết hoa, bỏ khoảng trắng thừa -> tên cột gốc
+    col_map = {str(c).strip().upper(): c for c in df.columns}
+
+    col_stt = col_map.get("STT")
+    col_cau_hoi = col_map.get("CÂU HỎI") or col_map.get("CAU HOI") or col_map.get("NỘI DUNG") or col_map.get("NOI DUNG")
+    col_dap_an = col_map.get("ĐÁP ÁN") or col_map.get("DAP AN") or col_map.get("ANSWER")
+
     questions: List[Question] = []
     for i, row in df.iterrows():
+        # Đọc phương án từ A đến J (hỗ trợ đề có 4, 5, 6... phương án: A, B, C, D, E, F...)
         phuong_an = {}
-        for k in ["A", "B", "C", "D"]:
-            if k in df.columns and row[k].strip():
-                phuong_an[k] = row[k].strip()
-        dap_an = row.get("Đáp án", "").strip().upper() or None
-        so_cau = int(row["STT"]) if "STT" in df.columns and row["STT"].strip() else i + 1
+        for k in "ABCDEFGHIJ":
+            col_k = col_map.get(k)
+            if col_k and str(row[col_k]).strip():
+                phuong_an[k] = str(row[col_k]).strip()
+
+        # Chuẩn hóa đáp án qua doc_dap_an (A và C -> A,C; AC -> A,C; B do... -> B)
+        raw_dap_an = str(row[col_dap_an]).strip() if col_dap_an else ""
+        dap_an = doc_dap_an(raw_dap_an)
+
+        raw_stt = str(row[col_stt]).strip() if col_stt else ""
+        try:
+            so_cau = int(float(raw_stt)) if raw_stt else i + 1
+        except (ValueError, TypeError):
+            so_cau = i + 1
+
+        than_cau_hoi = str(row[col_cau_hoi]).strip() if col_cau_hoi else ""
+        # Bỏ qua dòng trống hoàn toàn trong Excel
+        if not than_cau_hoi and not phuong_an:
+            continue
+
         questions.append(
             Question(
                 so_cau=so_cau,
-                than_cau_hoi=row.get("Câu hỏi", "").strip(),
+                than_cau_hoi=than_cau_hoi,
                 phuong_an=phuong_an,
                 dap_an_dung=dap_an,
             )
